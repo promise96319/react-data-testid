@@ -1,0 +1,61 @@
+{
+  "name": "react-data-testid",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Generate data-testid automatically for React element.",
+  "author": "Guanghui.qin",
+  "license": "MIT",
+  "keywords": ["data-testid", "react testid"],
+  "maintainers": [ "Guanghui Qin"],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./dist/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "dev": "unbuild --stub",
+    "lint": "eslint .",
+    "start": "esno src/index.ts",
+    "test": "vitest run",
+    "test:dev": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "fast-glob": "^3.3.2",
+    "kolorist": "^1.8.0",
+    "prettier": "^3.2.5"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^2.17.0",
+    "@antfu/ni": "^0.21.12",
+    "@antfu/utils": "^0.7.8",
+    "@types/minimist": "^1.2.5",
+    "@types/node": "^20.12.11",
+    "eslint": "^9.2.0",
+    "esno": "^4.7.0",
+    "rimraf": "^5.0.7",
+    "typescript": "^5.4.5",
+    "unbuild": "^2.0.0",
+    "vite": "^5.2.11",
+    "vitest": "^1.6.0"
+  }
+}
