@@ -36,9 +36,12 @@
     "build": "unbuild",
     "dev": "unbuild --stub",
     "lint": "eslint .",
+    "prepublishOnly": "nr test:once && nr build",
+    "release": "bumpp && npm publish",
     "test": "vitest",
     "test:once": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepare": "simple-git-hooks"
   },
   "peerDependencies": {
     "typescript": "^5.4.5"
@@ -55,10 +58,20 @@
     "@antfu/utils": "^0.7.8",
     "@types/minimist": "^1.2.5",
     "@types/node": "^20.12.11",
+    "bumpp": "^9.4.1",
     "eslint": "^9.2.0",
+    "lint-staged": "^15.2.2",
+    "simple-git-hooks": "^2.11.1",
     "typescript": "^5.4.5",
     "unbuild": "^2.0.0",
     "vite": "^5.2.11",
     "vitest": "^1.6.0"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
   }
+
 }
