@@ -4,6 +4,7 @@ import { scanDir } from '../src/scanner'
 describe('scanner', () => {
   it('scanDir', async () => {
     const files = await scanDir('./fixtures/**/*.tsx')
+
     expect(files).toMatchInlineSnapshot(`
       [
         {

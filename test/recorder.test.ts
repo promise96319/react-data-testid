@@ -22,7 +22,7 @@ describe('recorder', () => {
     `)
   })
 
-  it('record/read/save', async () => {
+  it('record、read and save testid', async () => {
     const filePath = `${cwd()}/fixtures/test.testid.json`
     const tsxFilePath = '/test'
     const div = 'const a = <div className="test" data-testid="12a45678"></div>'

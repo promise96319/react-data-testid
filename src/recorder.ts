@@ -17,16 +17,18 @@ export interface TestIdInfo {
 
 export async function saveTestIds(path: string, ids: TestIds) {
   const absolutePath = resolve(cwd(), path)
+
   try {
     await writeFile(absolutePath, JSON.stringify(ids, null, 2), 'utf-8')
   }
   catch (e) {
-    log.error('write file error: ', e)
+    log.error('save testid file failed: ', e)
   }
 }
 
 export async function readTestIds(path: string): Promise<TestIds> {
   const absolutePath = resolve(cwd(), path)
+
   try {
     if (!(await stat(absolutePath)).isFile()) {
       return {}
@@ -34,7 +36,7 @@ export async function readTestIds(path: string): Promise<TestIds> {
     return JSON.parse(await readFile(absolutePath, 'utf8'))
   }
   catch (e) {
-    log.error('read file error: ', e)
+    log.error('read testid file failed: ', e)
     return {}
   }
 }
@@ -61,14 +63,17 @@ export function parseTestIds(
 
             return true
           }
+
           return false
         }
+
         return false
       })
     }
 
     ts.forEachChild(node, visitor)
   }
+
   ts.forEachChild(ast, visitor)
   return idMaps
 }
@@ -158,7 +163,7 @@ export async function record(config: {
   const { removedInfo, addedInfo } = diff(newTestIds, oldTestIds)
 
   printDiffInfo(removedInfo, 'Removed', red)
-  
+
   if (showAddedId) {
     // eslint-disable-next-line no-console
     console.log(' ')

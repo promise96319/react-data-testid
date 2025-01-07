@@ -5,6 +5,14 @@ export function isTsxFile(path: string) {
   return /\.tsx$/.test(path)
 }
 
+export function isComponentLike(name: string) {
+  return /^[A-Z]/.test(name)
+}
+
+export function isPossibleAutoTestId(id: string) {
+  return /^[0-9a-f]{8,}$/.test(id)
+}
+
 export function createTestId(salt: string, random?: boolean, maxLength = 8) {
   const hash = createHash('sha256')
   const str = random ? Date.now() + salt + Math.random() : salt
@@ -38,8 +46,4 @@ export function loopCreateTestId(
 
   setUsedTestId(id)
   return id
-}
-
-export function isPossibleAutoTestId(id: string) {
-  return /^[0-9a-f]{8,}$/.test(id)
 }

@@ -1,6 +1,6 @@
 import { readFile, writeFile } from 'node:fs/promises'
-import type { CmdConfig, Config, FileConfig } from './type'
 import log from './logger'
+import type { CmdConfig, Config, FileConfig } from './type'
 
 export const defaultConfig: Required<CmdConfig> = {
   src: 'src/**/*.tsx',

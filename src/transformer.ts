@@ -1,11 +1,7 @@
-import type { Node } from 'typescript'
 import ts from 'typescript'
+import type { Node } from 'typescript'
 import { TestIdKey } from './const'
-import { loopCreateTestId } from './util'
-
-function isComponentLike(name: string) {
-  return /^[A-Z]/.test(name)
-}
+import { isComponentLike, loopCreateTestId } from './util'
 
 const emptyLinePlaceholder = '//__EMPTY_LINE__'
 
@@ -41,7 +37,7 @@ export function parseTsx(sourceText: string, filename: string = '') {
 
 interface TestIdContext {
   // Whether testid is changed
-  changed: boolean
+  modified: boolean
   // Generate random testid automatically
   random: boolean
   // Don't create testid for excluded elements
@@ -85,7 +81,7 @@ export function transform(ast: ts.SourceFile, ctx: TestIdContext) {
       const tagName = node.tagName.getText()
       if (ctx.excludeTags.includes(tagName)) {
         if (ctx.removeExcludeTags) {
-          ctx.changed = true
+          ctx.modified = true
           const filteredAttributes = node.attributes.properties.filter(
             (property) => {
               return !(
@@ -135,7 +131,7 @@ export function transform(ast: ts.SourceFile, ctx: TestIdContext) {
         return ts.visitEachChild(node, visitor, undefined)
 
       if (isComponent || hasTestIdKey) {
-        ctx.changed = true
+        ctx.modified = true
         const testidAttribute = ts.factory.createJsxAttribute(
           ts.factory.createIdentifier(TestIdKey),
           ts.factory.createStringLiteral(
@@ -191,8 +187,9 @@ export function addTestId(config: {
     removeExcludeTags = false,
   } = config
   const ast = parseTsx(sourceText, fileName)
+
   const ctx: TestIdContext = {
-    changed: false,
+    modified: false,
     random: randomTestId,
     excludeTags,
     removeExcludeTags,
@@ -201,6 +198,6 @@ export function addTestId(config: {
 
   return {
     transformedCode: generate(astWithTestId),
-    isTestIdChanged: ctx.changed,
+    isTestIdModified: ctx.modified,
   }
 }
