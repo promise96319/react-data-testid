@@ -11,7 +11,8 @@ const emptyLinePlaceholder = '//__EMPTY_LINE__'
 
 function encodeEmptyLine(sourceText: string) {
   const lines = sourceText.split('\n').map((line) => {
-    if (line.trim() === '') return emptyLinePlaceholder
+    if (line.trim() === '')
+      return emptyLinePlaceholder
     return line
   })
   return lines.join('\n')
@@ -19,7 +20,8 @@ function encodeEmptyLine(sourceText: string) {
 
 function decodeEmptyLine(sourceText: string) {
   const lines = sourceText.split('\n').map((line) => {
-    if (line.trim() === emptyLinePlaceholder) return ''
+    if (line.trim() === emptyLinePlaceholder)
+      return ''
     return line
   })
   return lines.join('\n')
@@ -38,9 +40,13 @@ export function parseTsx(sourceText: string, filename: string = '') {
 }
 
 interface TestIdContext {
+  // Whether testid is changed
   changed: boolean
+  // Generate random testid automatically
   random: boolean
+  // Don't create testid for excluded elements
   excludeTags: string[]
+  // Remove testid for excluded elements.
   removeExcludeTags: boolean
 }
 
@@ -51,6 +57,7 @@ function updateNodeAttributes(
   const props = ts.factory.createNodeArray(attributes)
 
   const newAttributes = ts.factory.updateJsxAttributes(node.attributes, props)
+
   let newNode
   if (ts.isJsxOpeningElement(node)) {
     newNode = ts.factory.updateJsxOpeningElement(
@@ -59,7 +66,8 @@ function updateNodeAttributes(
       node.typeArguments,
       newAttributes,
     )
-  } else {
+  }
+  else {
     newNode = ts.factory.updateJsxSelfClosingElement(
       node,
       node.tagName,
@@ -81,8 +89,8 @@ export function transform(ast: ts.SourceFile, ctx: TestIdContext) {
           const filteredAttributes = node.attributes.properties.filter(
             (property) => {
               return !(
-                ts.isJsxAttribute(property) &&
-                property.name.getText() === TestIdKey
+                ts.isJsxAttribute(property)
+                && property.name.getText() === TestIdKey
               )
             },
           )
@@ -96,8 +104,10 @@ export function transform(ast: ts.SourceFile, ctx: TestIdContext) {
 
       let isComponent = false
       if (ts.isIdentifier(node.tagName)) {
-        if (isComponentLike(node.tagName.getText())) isComponent = true
-      } else if (ts.isPropertyAccessExpression(node.tagName)) {
+        if (isComponentLike(node.tagName.getText()))
+          isComponent = true
+      }
+      else if (ts.isPropertyAccessExpression(node.tagName)) {
         isComponent = true
       }
 
@@ -105,13 +115,15 @@ export function transform(ast: ts.SourceFile, ctx: TestIdContext) {
       let hasTestIdValue = false
       const hasTestIdKey = attributes.some((property) => {
         if (
-          ts.isJsxAttribute(property) &&
-          property.name.getText() === TestIdKey
+          ts.isJsxAttribute(property)
+          && property.name.getText() === TestIdKey
         ) {
           const value = property.initializer
-          if (!value) return true
+          if (!value)
+            return true
 
-          if (ts.isStringLiteral(value) && value.getText() === '') return true
+          if (ts.isStringLiteral(value) && value.getText() === '')
+            return true
 
           hasTestIdValue = true
           return true
@@ -119,7 +131,8 @@ export function transform(ast: ts.SourceFile, ctx: TestIdContext) {
         return false
       })
 
-      if (hasTestIdValue) return ts.visitEachChild(node, visitor, undefined)
+      if (hasTestIdValue)
+        return ts.visitEachChild(node, visitor, undefined)
 
       if (isComponent || hasTestIdKey) {
         ctx.changed = true
@@ -151,6 +164,7 @@ export function transform(ast: ts.SourceFile, ctx: TestIdContext) {
 
     return ts.visitEachChild(node, visitor, undefined)
   }
+
   return ts.visitEachChild(ast, visitor, undefined)
 }
 

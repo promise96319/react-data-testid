@@ -1,5 +1,6 @@
 import { readFile, writeFile } from 'node:fs/promises'
-import { CmdConfig, Config, FileConfig } from './type'
+import type { CmdConfig, Config, FileConfig } from './type'
+import log from './logger'
 
 export const defaultConfig: Required<CmdConfig> = {
   src: 'src/**/*.tsx',
@@ -8,57 +9,22 @@ export const defaultConfig: Required<CmdConfig> = {
 }
 
 export const defaultFileConfig: Required<Omit<FileConfig, 'src' | 'output'>> = {
-  excludeTags: [
-    // design
-    'Collapse.Item',
-    'Form.Item',
-    'Table.Column',
-    'Tabs.Item',
-    'Tag',
-    'Typography',
-
-    'ConfigProvider',
-    'ConfigContext.Provider',
-    'ConfigContext.Consumer',
-
-    // ui
-    'UiConditionSearch.Field',
-    'UiConditionSearch.Logic',
-
-    'UiFilter.Select',
-    'UiFilter.Input',
-    'UiFilter.Date',
-    'UiFilter.Number',
-    'UiFilter.Cascader',
-
-    'UiSearch.Input',
-    'UiSearch.Select',
-    'UiSearch.Date',
-    'UiSearch.Custom',
-    'UiSearch.Tree',
-    'UiSearch.Cascader',
-
-    'UiTable.Column',
-
-    'UiGrid.Item',
-
-    'UiTag',
-  ],
+  excludeTags: [],
   removeExcludeTags: false,
 }
 
-export const readConfigFile = async (
-  configPath: string,
-): Promise<FileConfig> => {
+export async function readConfigFile(configPath: string): Promise<FileConfig> {
   try {
     const text = await readFile(configPath, 'utf-8')
     return JSON.parse(text)
-  } catch (e) {
+  }
+  catch (e) {
+    log.error(`read config file failed: ${configPath}, `, e)
     return {}
   }
 }
 
-export const initConfigFile = async (configPath: string) => {
+export async function initConfigFile(configPath: string) {
   try {
     const { config, ...restCmdConfig } = defaultConfig
     await writeFile(
@@ -66,12 +32,13 @@ export const initConfigFile = async (configPath: string) => {
       JSON.stringify({ ...restCmdConfig, ...defaultFileConfig }, null, 2),
       'utf-8',
     )
-  } catch (e) {
-    return
+  }
+  catch (e) {
+    log.error(`init config file failed: ${configPath}, `, e)
   }
 }
 
-export const resolveConfig = async (cmdConfig: CmdConfig): Promise<Config> => {
+export async function resolveConfig(cmdConfig: CmdConfig): Promise<Config> {
   const fileConfigPath = cmdConfig.config ?? defaultConfig.config
   const fileConfig = await readConfigFile(fileConfigPath)
 

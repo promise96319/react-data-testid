@@ -1,9 +1,12 @@
-# qt-testid
+# react-data-testid
 
 ## 安装
 
 ```bash
-pnpm i @qt/testid -g
+pnpm i react-data-testid -g
+
+# OR
+pnpm i react-data-testid -D
 ```
 
 ## 使用
@@ -12,7 +15,7 @@ pnpm i @qt/testid -g
 
 ```bash
 # 该命令会自动生成 testid 的配置文件
-qt-tools testid init
+testid init
 ```
 
 参数说明：

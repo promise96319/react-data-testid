@@ -23,7 +23,7 @@ describe('recorder', () => {
   })
 
   it('record/read/save', async () => {
-    const filePath = `${cwd()}/test/tmp.testid.json`
+    const filePath = `${cwd()}/fixtures/test.testid.json`
     const tsxFilePath = '/test'
     const div = 'const a = <div className="test" data-testid="12a45678"></div>'
 
@@ -48,8 +48,8 @@ describe('recorder', () => {
       }
     `)
 
-    const newDiv =
-      'const a = <div className="test" data-testid="87654321"></div>'
+    const newDiv
+      = 'const a = <div className="test" data-testid="87654321"></div>'
     const newIds = { [tsxFilePath]: parseTestIds(parseTsx(newDiv)) }
     expect(newIds).toMatchInlineSnapshot(`
       {

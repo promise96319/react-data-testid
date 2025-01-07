@@ -3,6 +3,7 @@ import { basename } from 'node:path'
 import fg from 'fast-glob'
 import type { TsxFile } from './type'
 import log from './logger'
+import { isTsxFile } from './util'
 
 export async function scanDir(dir: string, files: TsxFile[] = []) {
   const filePaths = await fg.async(dir, {
@@ -13,7 +14,7 @@ export async function scanDir(dir: string, files: TsxFile[] = []) {
   })
 
   await Promise.all(filePaths.map(async (filePath) => {
-    if (/\.tsx$/.test(filePath)) {
+    if (isTsxFile(filePath)) {
       files.push({
         path: filePath,
         name: basename(filePath),

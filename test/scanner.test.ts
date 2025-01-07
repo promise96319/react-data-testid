@@ -3,12 +3,16 @@ import { scanDir } from '../src/scanner'
 
 describe('scanner', () => {
   it('scanDir', async () => {
-    const files = await scanDir('./example/**/*.tsx')
+    const files = await scanDir('./fixtures/**/*.tsx')
     expect(files).toMatchInlineSnapshot(`
       [
         {
-          "name": "home.page.tsx",
-          "path": "./example/pages/home/home.page.tsx",
+          "name": "a.tsx",
+          "path": "./fixtures/a.tsx",
+        },
+        {
+          "name": "b.tsx",
+          "path": "./fixtures/b.tsx",
         },
       ]
     `)

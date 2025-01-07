@@ -6,15 +6,13 @@ import { parseTestIds, record } from './recorder'
 import { replace } from './replacer'
 import { initUsedTestIds } from './used-ids'
 
-export * from './config'
-
 export async function generateTestId(config: Config) {
   const { src, output, excludeTags, removeExcludeTags } = config
 
-  // 扫描
+  // scan
   const files = await scanDir(src)
 
-  // 转换
+  // transform
   await initUsedTestIds(output)
   const filesWithCode: Required<TsxFile>[] = await Promise.all(
     files.map(async (file) => {
@@ -36,7 +34,7 @@ export async function generateTestId(config: Config) {
     }),
   )
 
-  // 记录
+  // record
   const newTestIds: TestIds = {}
   await Promise.all(
     filesWithCode.map(async (file) => {

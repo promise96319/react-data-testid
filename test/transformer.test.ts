@@ -4,10 +4,12 @@ import { addTestId } from '../src/transformer'
 describe('add testid', () => {
   it('self close element', () => {
     const div = `const a = <div className="test"/>`
+
     const { transformedCode } = addTestId({
       sourceText: div,
       randomTestId: false,
     })
+
     expect(transformedCode).toMatchInlineSnapshot(`
       "const a = <div className="test"/>;
       "
@@ -16,10 +18,12 @@ describe('add testid', () => {
 
   it('open element', () => {
     const div = `const a = <div className="test"/>`
+
     const { transformedCode } = addTestId({
       sourceText: div,
       randomTestId: false,
     })
+
     expect(transformedCode).toMatchInlineSnapshot(`
       "const a = <div className="test"/>;
       "
@@ -28,6 +32,7 @@ describe('add testid', () => {
 
   it('div', () => {
     const div1 = `const a = <div className="test"></div>`
+
     expect(
       addTestId({
         sourceText: div1,
@@ -39,6 +44,7 @@ describe('add testid', () => {
     `)
 
     const div2 = `const a = <div className="test" data-testid hello="world"></div>`
+
     expect(
       addTestId({
         sourceText: div2,
@@ -50,6 +56,7 @@ describe('add testid', () => {
     `)
 
     const div3 = `const a = <div className="test" data-testid="custom"></div>`
+
     expect(
       addTestId({
         sourceText: div3,
@@ -85,6 +92,7 @@ describe('add testid', () => {
     `)
 
     const comp3 = `const a = <Comp className="test" data-testid="custom"/>`
+
     expect(
       addTestId({
         sourceText: comp3,

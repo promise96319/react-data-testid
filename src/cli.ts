@@ -2,18 +2,18 @@ import process from 'node:process'
 import { program } from 'commander'
 import { name, version } from '../package.json'
 import {
-  generateTestId,
   defaultConfig,
-  resolveConfig,
   initConfigFile,
-} from './index'
+  resolveConfig,
+} from './config'
+import { generateTestId } from './index'
 
 program.name(name).version(version)
 
 program
   .command('init')
   .description('init config file')
-  .option('-c, --config <config>', 'testid config path', defaultConfig.config)
+  .option('-c, --config <config>', 'testid config file path', defaultConfig.config)
   .action(async (args) => {
     await initConfigFile(args.config)
   })

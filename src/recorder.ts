@@ -19,7 +19,8 @@ export async function saveTestIds(path: string, ids: TestIds) {
   const absolutePath = resolve(cwd(), path)
   try {
     await writeFile(absolutePath, JSON.stringify(ids, null, 2), 'utf-8')
-  } catch (e) {
+  }
+  catch (e) {
     log.error('write file error: ', e)
   }
 }
@@ -31,7 +32,9 @@ export async function readTestIds(path: string): Promise<TestIds> {
       return {}
     }
     return JSON.parse(await readFile(absolutePath, 'utf8'))
-  } catch (e) {
+  }
+  catch (e) {
+    log.error('read file error: ', e)
     return {}
   }
 }
@@ -46,8 +49,8 @@ export function parseTestIds(
       const attributes = node.attributes.properties
       attributes.some((property) => {
         if (
-          ts.isJsxAttribute(property) &&
-          property.name.getText() === TestIdKey
+          ts.isJsxAttribute(property)
+          && property.name.getText() === TestIdKey
         ) {
           const value = property.initializer
           if (value && ts.isStringLiteral(value)) {
@@ -87,7 +90,7 @@ export function normalizeTestIds(testids: TestIds) {
 export function diff(
   newTestIds: TestIds,
   oldTestIds: TestIds,
-): { removedInfo: TestIds; addedInfo: TestIds } {
+): { removedInfo: TestIds, addedInfo: TestIds } {
   const newIdInfo = normalizeTestIds(newTestIds)
   const oldIdInfo = normalizeTestIds(oldTestIds)
 
@@ -153,15 +156,17 @@ export async function record(config: {
   const { path, newTestIds, showAddedId = true } = config
   const oldTestIds: TestIds = await readTestIds(path)
   const { removedInfo, addedInfo } = diff(newTestIds, oldTestIds)
-  printDiffInfo(removedInfo, '移除', red)
+
+  printDiffInfo(removedInfo, 'Removed', red)
+  
   if (showAddedId) {
     // eslint-disable-next-line no-console
     console.log(' ')
-    printDiffInfo(addedInfo, '新增', green)
+    printDiffInfo(addedInfo, 'Added', green)
   }
 
   if (!Object.keys(removedInfo).length && !Object.keys(addedInfo).length) {
-    log(green('✅ test id 未发生变化'))
+    log(green('✅ testid has not changed.'))
   }
 
   await saveTestIds(path, newTestIds)
