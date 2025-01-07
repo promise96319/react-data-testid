@@ -17,7 +17,7 @@ describe('add testid', () => {
   })
 
   it('open element', () => {
-    const div = `const a = <div className="test"/>`
+    const div = `const a = <div className="test"></div>`
 
     const { transformedCode } = addTestId({
       sourceText: div,
@@ -25,50 +25,12 @@ describe('add testid', () => {
     })
 
     expect(transformedCode).toMatchInlineSnapshot(`
-      "const a = <div className="test"/>;
-      "
-    `)
-  })
-
-  it('div', () => {
-    const div1 = `const a = <div className="test"></div>`
-
-    expect(
-      addTestId({
-        sourceText: div1,
-        randomTestId: false,
-      }).transformedCode,
-    ).toMatchInlineSnapshot(`
       "const a = <div className="test"></div>;
       "
     `)
-
-    const div2 = `const a = <div className="test" data-testid hello="world"></div>`
-
-    expect(
-      addTestId({
-        sourceText: div2,
-        randomTestId: false,
-      }).transformedCode,
-    ).toMatchInlineSnapshot(`
-      "const a = <div className="test" hello="world" data-testid="93603b2f"></div>;
-      "
-    `)
-
-    const div3 = `const a = <div className="test" data-testid="custom"></div>`
-
-    expect(
-      addTestId({
-        sourceText: div3,
-        randomTestId: false,
-      }).transformedCode,
-    ).toMatchInlineSnapshot(`
-      "const a = <div className="test" data-testid="custom"></div>;
-      "
-    `)
   })
 
-  it('component', () => {
+  it('react component', () => {
     const comp1 = `const a = <Comp className="test"/>`
     expect(
       addTestId({
@@ -126,6 +88,34 @@ describe('add testid', () => {
       }).transformedCode,
     ).toMatchInlineSnapshot(`
       "const a = <Comp.Child className="test" head={<Head data-testid="a6297572"></Head>} data-testid="24f0a816"/>;
+      "
+    `)
+  })
+
+  it('has testid flag', () => {
+    const div = `const a = <div className="test" data-testid hello="world"></div>`
+
+    expect(
+      addTestId({
+        sourceText: div,
+        randomTestId: false,
+      }).transformedCode,
+    ).toMatchInlineSnapshot(`
+      "const a = <div className="test" hello="world" data-testid="93603b2f"></div>;
+      "
+    `)
+  })
+
+  it('has testid', () => {
+    const div = `const a = <div className="test" data-testid="custom"></div>`
+
+    expect(
+      addTestId({
+        sourceText: div,
+        randomTestId: false,
+      }).transformedCode,
+    ).toMatchInlineSnapshot(`
+      "const a = <div className="test" data-testid="custom"></div>;
       "
     `)
   })

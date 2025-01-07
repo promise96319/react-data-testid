@@ -12,7 +12,7 @@ export type TestIds = Record<FilePath, Record<TestId, TestIdDescription>>
 
 export interface CmdConfig {
   // 配置文件路径
-  config?: string
+  configFilePath?: string
 
   // tsx 路径
   src?: string
@@ -20,7 +20,7 @@ export interface CmdConfig {
   output?: string
 }
 
-export interface FileConfig extends Partial<Omit<CmdConfig, 'config'>> {
+export interface FileConfig extends Partial<Omit<CmdConfig, 'configFilePath'>> {
   // 排除的 tags
   excludeTags?: string[]
   removeExcludeTags?: boolean

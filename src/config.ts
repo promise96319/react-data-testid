@@ -5,7 +5,7 @@ import type { CmdConfig, Config, FileConfig } from './type'
 export const defaultConfig: Required<CmdConfig> = {
   src: 'src/**/*.tsx',
   output: '.testid.json',
-  config: '.testidrc',
+  configFilePath: '.testidrc',
 }
 
 export const defaultFileConfig: Required<Omit<FileConfig, 'src' | 'output'>> = {
@@ -26,7 +26,7 @@ export async function readConfigFile(configPath: string): Promise<FileConfig> {
 
 export async function initConfigFile(configPath: string) {
   try {
-    const { config, ...restCmdConfig } = defaultConfig
+    const { configFilePath, ...restCmdConfig } = defaultConfig
     await writeFile(
       configPath,
       JSON.stringify({ ...restCmdConfig, ...defaultFileConfig }, null, 2),
@@ -39,7 +39,7 @@ export async function initConfigFile(configPath: string) {
 }
 
 export async function resolveConfig(cmdConfig: CmdConfig): Promise<Config> {
-  const fileConfigPath = cmdConfig.config ?? defaultConfig.config
+  const fileConfigPath = cmdConfig.configFilePath ?? defaultConfig.configFilePath
   const fileConfig = await readConfigFile(fileConfigPath)
 
   const mergedFileConfig = {

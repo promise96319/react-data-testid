@@ -13,7 +13,7 @@ program.name(name).version(version)
 program
   .command('init')
   .description('init config file')
-  .option('-c, --config <config>', 'testid config file path', defaultConfig.config)
+  .option('-c, --config <config>', 'testid config file path', defaultConfig.configFilePath)
   .action(async (args) => {
     await initConfigFile(args.config)
   })
@@ -26,7 +26,7 @@ program
   )
   .option(
     '-c, --config <config>',
-    `testid config path (default "${defaultConfig.config}")`,
+    `testid config path (default "${defaultConfig.configFilePath}")`,
   )
   .action(async (args) => {
     const resolvedConfig = await resolveConfig(args)
